@@ -33,17 +33,17 @@ enum CmdId
 
 typedef struct DataHead_
 {
-    uint16_t moduleId;
+    uint16_t moduleId;                  // fixed for MODULEID  9.24  birthday
     uint16_t dataId;
     uint8_t  dataLen;
-    uint8_t  recv_len;
+    uint8_t  recvLen;
 } Head;
 
 typedef struct SerialPackage_
 {
-    Head head_; // fixed for MODULEID  9.24  birthday
-    uint8_t byData_[BODY_MAX_BYTESIZE]; // data content, max size is 1024, append crc16
-    uint8_t check_;
+    Head head_; 
+    uint8_t byData_[BODY_MAX_BYTESIZE]; // data content, max size is 52
+    uint8_t check_;                     //append crc
 } SerialPakage;
 
 

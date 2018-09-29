@@ -135,9 +135,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         if (USART1 == huart->Instance)
         {
             /****TODO******/
-            memcpy((uint8_t *)&SerialPackRX.head_+SerialPackRX.head_.recv_len, &s_byUartRxdBuf[dwDevice][0], USART_RECLEN_TRIG_HOOK);
-            SerialPackRX.head_.recv_len += USART_RECLEN_TRIG_HOOK;
-            printf("%d\r\n",SerialPackRX.head_.recv_len);
+            memcpy((uint8_t *)&SerialPackRX.head_+SerialPackRX.head_.recvLen, &s_byUartRxdBuf[dwDevice][0], USART_RECLEN_TRIG_HOOK);
+            SerialPackRX.head_.recvLen += USART_RECLEN_TRIG_HOOK;
+            printf("%d\r\n",SerialPackRX.head_.recvLen);
         }
         else
         {

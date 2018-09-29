@@ -5975,49 +5975,49 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-        76         14          0          0          0      11354   bsp.o
-        52          0          0          0          0        352   cpu_a.o
-       540         98          0         28         16       9692   cpu_core.o
-       328         40          0          6          0       4117   delay.o
-       376         34          0          1          0       1674   key.o
-        88         10          0          0          0        839   led.o
-       102          0          0          0          0      13012   lib_mem.o
-       612        156          0          0       2120     433243   main.o
-         2          0        148          0       3936      20065   os_cfg_app.o
-      2446        316          0          0          0      36239   os_core.o
-       280         14          0          0          0        444   os_cpu_a.o
-      1052        156          0          4          0      25980   os_cpu_c.o
-       424        278        364          0          0       4825   os_dbg.o
-        24         10          0          0          0        942   os_flag.o
-        24         10          0          0          0        945   os_mem.o
-       174         18          0          0          0       2372   os_msg.o
-      1228         56          0          0          0       7491   os_mutex.o
-       136         16          0          8          0       3066   os_prio.o
-        24         10          0          0          0        939   os_q.o
-        24         10          0          0          0        937   os_sem.o
-      1592        196          0          0          0       4223   os_stat.o
-      3202        154          0          0          0      14377   os_task.o
-      1162         88          0          0          0       6187   os_tick.o
-       520         40          0          0          0       2905   os_time.o
-       568        142          0          0          0       3765   os_tmr.o
-         0          0          0        188       1596      17846   os_var.o
-       104         34        504          0       1536        836   startup_stm32f767xx.o
-       108         20          0          4          0       2955   stm32f7xx_hal.o
-       338         22          0          0          0      36181   stm32f7xx_hal_cortex.o
-       608         10          8          0          0       3927   stm32f7xx_hal_dma.o
-       564         52          0          0          0       2919   stm32f7xx_hal_gpio.o
-         2          0          0          0          0        474   stm32f7xx_hal_msp_1.o
-       144          8          0          0          0       1172   stm32f7xx_hal_pwr_ex.o
-       716         50          0          0          0       3760   stm32f7xx_hal_rcc.o
-      1232         12          0          0          0       1740   stm32f7xx_hal_rcc_ex.o
-      2368         54          0          0          0      10176   stm32f7xx_hal_uart.o
-        22          0          0          0          0       3327   stm32f7xx_it_1.o
-       456         26          0          0          0     271769   sys.o
-       100         18         24          4          0       1171   system_stm32f7xx_1.o
-       868        126          0         44       3104       9148   uart_interface.o
+        76         14          0          0          0      11394   bsp.o
+        52          0          0          0          0        360   cpu_a.o
+       540         98          0         28         16       9776   cpu_core.o
+       328         40          0          6          0       4169   delay.o
+       376         34          0          1          0       1694   key.o
+        88         10          0          0          0        851   led.o
+       102          0          0          0          0      13036   lib_mem.o
+       612        156          0          0       2120     433375   main.o
+         2          0        148          0       3936      20093   os_cfg_app.o
+      2446        316          0          0          0      36415   os_core.o
+       280         14          0          0          0        448   os_cpu_a.o
+      1052        156          0          4          0      26060   os_cpu_c.o
+       424        278        364          0          0       4841   os_dbg.o
+        24         10          0          0          0        958   os_flag.o
+        24         10          0          0          0        953   os_mem.o
+       174         18          0          0          0       2404   os_msg.o
+      1228         56          0          0          0       7543   os_mutex.o
+       136         16          0          8          0       3098   os_prio.o
+        24         10          0          0          0        951   os_q.o
+        24         10          0          0          0        945   os_sem.o
+      1592        196          0          0          0       4251   os_stat.o
+      3202        154          0          0          0      14481   os_task.o
+      1162         88          0          0          0       6235   os_tick.o
+       520         40          0          0          0       2929   os_time.o
+       568        142          0          0          0       3801   os_tmr.o
+         0          0          0        188       1596      17858   os_var.o
+       104         34        504          0       1536        840   startup_stm32f767xx.o
+       108         20          0          4          0       2999   stm32f7xx_hal.o
+       338         22          0          0          0      36221   stm32f7xx_hal_cortex.o
+       608         10          8          0          0       3963   stm32f7xx_hal_dma.o
+       564         52          0          0          0       2943   stm32f7xx_hal_gpio.o
+         2          0          0          0          0        478   stm32f7xx_hal_msp_1.o
+       144          8          0          0          0       1184   stm32f7xx_hal_pwr_ex.o
+       716         50          0          0          0       3800   stm32f7xx_hal_rcc.o
+      1232         12          0          0          0       1752   stm32f7xx_hal_rcc_ex.o
+      2368         54          0          0          0      10276   stm32f7xx_hal_uart.o
+        22          0          0          0          0       3371   stm32f7xx_it_1.o
+       456         26          0          0          0     271817   sys.o
+       100         18         24          4          0       1187   system_stm32f7xx_1.o
+       868        126          0         44       3104       9228   uart_interface.o
 
     ----------------------------------------------------------------------
-     22708       2298       1082        292      12308     977386   Object Totals
+     22708       2298       1082        292      12308     978978   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         22          0          2          5          0          0   (incl. Padding)
 
@@ -6078,8 +6078,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     23594       2340       1082        292      12404     960386   Grand Totals
-     23594       2340       1082        292      12404     960386   ELF Image Totals
+     23594       2340       1082        292      12404     961978   Grand Totals
+     23594       2340       1082        292      12404     961978   ELF Image Totals
      23594       2340       1082        292          0          0   ROM Totals
 
 ==============================================================================
