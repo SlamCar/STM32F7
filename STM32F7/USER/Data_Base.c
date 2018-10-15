@@ -1,5 +1,5 @@
 #include "Data_Base.h"
 
+Feedback_Msg feedbackMsg;
 
-
-APP_USER_Input   g_APP_USER_Input = {0};
+ROBOT_Input   g_ROBOT_Input = {0};

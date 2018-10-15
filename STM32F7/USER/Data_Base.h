@@ -11,7 +11,7 @@ enum  APP_USER_Line
 typedef struct
 {
    u8 test;
-}APP_USER_Parm;
+}ROBOT_Parm;
 
 typedef struct
 {
@@ -21,40 +21,37 @@ typedef struct
 
 typedef struct
 {
-    u8 test;
+    float now_speed;
+    float now_angle;
 }Feedback_Msg;
 
 typedef struct
 {
     u8 led;
     u8 beep; 
-
-}APP_USER_Status;
+}ROBOT_Status;
 
 typedef struct
 {
     u8 led;
     u8 beep;
     Control_Msg  control_msg;
-
-}APP_USER_Input;
+}ROBOT_Input;
 
 typedef struct
 {
     u8 led;
     u8 beep;
-    Feedback_Msg  feedback_msg;
-
-}APP_USER_Output;
+}ROBOT_Output;
 
 
-extern  APP_USER_Parm    g_APP_USER_Parm;
+extern  ROBOT_Parm    g_ROBOT_Parm;
     
-extern  APP_USER_Input   g_APP_USER_Input;
-extern  APP_USER_Output  g_APP_USER_Output;
+extern  ROBOT_Input   g_ROBOT_Input;
+extern  ROBOT_Output  g_ROBOT_Output;
     
-void USER_GetInput(APP_USER_Input *Input);
-void USER_RunCtr(APP_USER_Input *Input, APP_USER_Output *Output);
-void USER_SetOutput(APP_USER_Output* Output);
+//void ROBOT_Input(ROBOT_Input *Input);
+//void ROBOT_RunCtr(ROBOT_Input *Input, ROBOT_Output *Output);
+//void ROBOT_Output(ROBOT_Output* Output);
 
 #endif

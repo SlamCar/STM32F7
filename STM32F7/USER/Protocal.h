@@ -2,8 +2,9 @@
 #define _PROTOCAL_H_
 #include "sys.h"
 
-#define     BODY_MAX_BYTESIZE  52
-#define     CRC_BYTESIZE       1
+#define     HEAD_BYTESIZE      6
+#define     CRC_BYTESIZE       2
+#define     BODY_MAX_BYTESIZE  50
 
 #define     MODULEID           0x039c
 
@@ -41,10 +42,9 @@ typedef struct DataHead_
 
 typedef struct SerialPackage_
 {
-    Head head_; 
-    uint8_t byData_[BODY_MAX_BYTESIZE]; // data content, max size is 52
-    uint8_t check_;                     //append crc
+    Head head_;                         // 6 bype
+    uint8_t byData_[BODY_MAX_BYTESIZE]; // data content, max size is 50
+    uint16_t check_;                    // append crc16
 } SerialPakage;
-
-
+  
 #endif

@@ -105,3 +105,4 @@
 .\obj\main.o: .\DRIVER\KEY\key.h
 .\obj\main.o: USER\Protocal.h
 .\obj\main.o: .\DRIVER\UART\UART_Interface.h
+.\obj\main.o: USER\transport.h

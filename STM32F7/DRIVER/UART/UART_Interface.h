@@ -4,6 +4,8 @@
 
 #include "sys.h"
 
+#define USART_REC_LEN        100    //定义最大接收字节数 200
+extern u8 USART_RX_BUF[USART_REC_LEN];
 #define UART_NUM                0x08u
 
 #define UART_DEV1               0x00u

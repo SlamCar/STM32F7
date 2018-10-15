@@ -42,8 +42,15 @@ typedef __I uint32_t vuc32;
 typedef __I uint16_t vuc16; 
 typedef __I uint8_t vuc8;  
 
-#define ON	1
-#define OFF	0
+#define ON  1
+#define OFF 0
+
+typedef enum BOOL
+{
+    FALSE = 0,
+    TRUE     
+}Bool;
+
 #define Write_Through() (*(__IO uint32_t*)0XE000EF9C=1UL<<2) //Cache透写模式
 
 void Cache_Enable(void);                                    //使能STM32F7的L1-Cahce
