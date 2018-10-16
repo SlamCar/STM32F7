@@ -86,6 +86,7 @@ int dataCheck(uint8_t * data)
         case 8:
             memcpy(++p_data, &data, 1);
             //g_SerialPackRX.check_ = (uint16_t)data << 8;
+            //校验成功 db_cmd_update 打开
             flag = 0;
            // rec_flag = 1;
             break;
@@ -104,7 +105,17 @@ Bool feedMsgPack(Feedback_Msg msg)
     g_SerialPackTX.head_.recvLen = 0X00u;
     memcpy((uint8_t *)&g_SerialPackTX.byData_,(uint8_t *)&msg,sizeof(Feedback_Msg));
 
+    
     g_SerialPackTX.check_ = 0X1234u;
     return TRUE;
+}
+
+Bool EndianTrans()
+{
+    memrev16((void *)&g_SerialPackTX.head_.moduleId);
+    memrev16((void *)&g_SerialPackTX.head_.dataId);
+    memrev32((void *)&g_SerialPackTX.byData_);
+    memrev32((void *)&g_SerialPackTX.byData_[3]);
+    memrev16((void *)&g_SerialPackTX.check_);
 }
 

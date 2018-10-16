@@ -27,6 +27,9 @@ enum Receive_State
 Bool feedMsgPack(Feedback_Msg msg);
 int dataCheck(uint8_t * data);
 
+Bool EndianTrans();
+
+
 
 
 

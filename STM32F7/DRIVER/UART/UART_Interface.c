@@ -140,99 +140,98 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
         if (USART1 == huart->Instance)
         {
-//            /****TODO******/
-//            //USART_RX_BUF[len] = s_byUartRxdBuf[dwDevice][0];
-//            //len++;
-//            memcpy((uint8_t *)&SerialPackRX, &s_byUartRxdBuf[dwDevice][0], USART_RECLEN_TRIG_HOOK);
-//            //SerialPackRX.head_.recvLen += USART_RECLEN_TRIG_HOOK;
-//            //printf("%d\r\n",SerialPackRX.head_.recvLen);
-//            //flag = 1;
             uint8_t data = s_byUartRxdBuf[dwDevice][0];
             static uint8_t flag = 0;
-//            static uint8_t len = 0;
-            
+            static uint8_t data_len = 0;
+            static uint8_t recv_len = 0;
             switch(flag)
             {
-                /***moduleId***/
-                case 0:
-                    //memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
-                    if(0x03 == data)
-                    {
-                       p_pack =  (uint8_t *)&g_SerialPackRX;
-                       memcpy(p_pack, &data, 1);
-                       flag ++;
-                    }
-                    else 
-                        flag = 0;
-                    break;
-                case 1:
-                    if(0x9c == data)
-                    {
-                       memcpy(++p_pack, &data, 1); 
-                       flag ++;
-                    }
-                    else
-                    {
-                        flag = 0;
-                        memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
-                    }
-                    break;
-                /***dataId***/    
-                case 2:  
-                    memcpy(++p_pack, &data, 1); 
-                    flag ++;
-                    break;
-                case 3:
-                    memcpy(++p_pack, &data, 1);
-                    flag ++;                
-                    break;
-                /***dataLen***/
-                case 4:
-                    memcpy(++p_pack, &data, 1);
-                    flag ++;
-                    break;
-                /***recvLen***/
-                case 5:
-                    memcpy(++p_pack, &data, 1); 
-                    if(0 == g_SerialPackRX.head_.dataLen)
-                    {
-                       flag = 7;
-                    }
-                    else flag ++;  
-                    break;
-                /***data***/
-                case 6: 
-                    if(g_SerialPackRX.head_.dataLen == g_SerialPackRX.head_.recvLen)
-                    {
-                       flag = 7;
-                    }
-                    
-                    if(g_SerialPackRX.head_.recvLen < g_SerialPackRX.head_.dataLen)
-                    {
-                       g_SerialPackRX.head_.recvLen++; 
-                       memcpy(++p_pack, &data, 1);                        
-                    }
-                    else
-                    {
-                      flag = 0;    //data error
-                      memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
-                    }
-                    break;
-                /***crc L***/
-                case 7:
-                    memcpy(++p_pack, &data, 1);
-                    //g_SerialPackRX.check_ = (uint16_t)data;
-                    flag ++;
-                    break;
-                /***crc H***/
-                case 8:
-                    memcpy(++p_pack, &data, 1);
-                    //g_SerialPackRX.check_ = (uint16_t)data << 8;
+            /***moduleId***/
+            case 0:
+                //memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
+                if(0x03 == data)
+                {
+                   p_pack =  (uint8_t *)&g_SerialPackRX;
+                   memcpy(p_pack, &data, 1);
+                   flag ++;
+                }
+                else 
                     flag = 0;
-                    rec_flag = 1;
-                    break;
-                case 53:
-                    break;
+                break;
+            case 1:
+                if(0x9c == data)
+                {
+                   memcpy(++p_pack, &data, 1); 
+                   flag ++;
+                }
+                else
+                {
+                    flag = 0;
+                    memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
+                }
+                break;
+            /***dataId***/    
+            case 2:  
+                memcpy(++p_pack, &data, 1); 
+                flag ++;
+                break;
+            case 3:
+                memcpy(++p_pack, &data, 1);
+                flag ++;                
+                break;
+            /***dataLen***/
+            case 4:
+                memcpy(++p_pack, &data, 1);
+                data_len = data; 
+                flag ++;
+                break;
+            /***recvLen***/
+            case 5:
+                memcpy(++p_pack, &data, 1); 
+                if(0 == data_len)
+                {
+                   flag = 7;
+                }
+                else flag ++;  
+                break;
+            /***data***/
+            case 6:
+                if(recv_len < data_len)
+                {
+                   //g_SerialPackRX.head_.recvLen++; 
+                    recv_len ++;
+                    memcpy(++p_pack, &data, 1);
+                }
+                
+                if(recv_len == data_len)
+                {
+                   flag = 7;
+                }
+                else if(recv_len > data_len)
+                {
+                  flag = 0;    //data error
+                  recv_len = 0;
+                  data_len = 0;
+                  memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
+                }
+                break;                 
+            /***crc L***/
+            case 7:
+                //memcpy(++p_pack, &data, 1);
+                g_SerialPackRX.check_ |= (uint16_t)data;
+                flag ++;
+                break;
+            /***crc H***/
+            case 8:
+                //memcpy(++p_pack, &data, 1);
+                g_SerialPackRX.check_ |= (uint16_t)data << 8 ;
+                recv_len = 0;
+                data_len = 0;
+                flag = 0;
+                rec_flag = 1;
+                break;
+            case 53:
+                break;
             }
         }
         else

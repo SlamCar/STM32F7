@@ -64,6 +64,13 @@ u8 Get_DCahceSta(void);//ÅÐ¶ÏI_DacheÊÇ·ñ´ò¿ª
 #define ASSERT_NULL_VOID(x) {if (ISNULL(x)) { return;}}
 #define ASSERT_NULL_RETN(x, ret) {if (ISNULL(x)) { return ret;}}
 
+void memrev16(void *p);
+void memrev32(void *p);
+//void memrev64(void *p) ;
+uint16_t intrev16(uint16_t v);
+uint32_t intrev32(uint32_t v);
+//uint64_t intrev64(uint64_t v;)
+
 void hex_to_str(char *pStr, u8 *pHex, u16 len);
 u16 StrToHex(char *pStr, u8 *pHex, u16 len);
 

@@ -117,7 +117,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>ST-LINKIII-KEIL_SWO</Key>
-          <Name>-U54FF7D067289515019111567 -O206 -S0 -C0 -A0 -N00("ARM CoreSight SW-DP") -D00(5BA02477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20020000 -FC1000 -FN1 -FF0STM32F7x_1024.FLM -FS08000000 -FL0100000 -FP0($$Device:STM32F767IGTx$CMSIS\Flash\STM32F7x_1024.FLM)</Name>
+          <Name>-U54FF7D067289515019111567 -O206 -S2 -C0 -A0 -N00("ARM CoreSight SW-DP") -D00(5BA02477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8004 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20020000 -FC1000 -FN1 -FF0STM32F7x_1024.FLM -FS08000000 -FL0100000 -FP0($$Device:STM32F767IGTx$CMSIS\Flash\STM32F7x_1024.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -154,9 +154,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>157</LineNumber>
+          <LineNumber>200</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134220044</Address>
+          <Address>134220202</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -165,7 +165,39 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>E:\my_program\work\鍙夎溅鐩稿叧\鍙夎溅涓嬩綅鏈?STM32\STM32F7\USER\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\SLAM\USER/main.c\157</Expression>
+          <Expression>\\SLAM\USER/main.c\200</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>227</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134224560</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>E:\my_program\work\鍙夎溅鐩稿叧\鍙夎溅涓嬩綅鏈?STM32\STM32F7\DRIVER\UART\UART_Interface.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\SLAM\DRIVER/UART/UART_Interface.c\227</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>221</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134224534</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>E:\my_program\work\鍙夎溅鐩稿叧\鍙夎溅涓嬩綅鏈?STM32\STM32F7\DRIVER\UART\UART_Interface.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\SLAM\DRIVER/UART/UART_Interface.c\221</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -198,6 +230,16 @@
           <count>5</count>
           <WinNumber>1</WinNumber>
           <ItemText>len</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_SerialPackTX</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_SerialPackRX</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
@@ -290,7 +332,7 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>4</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\USER\transport.c</PathWithFileName>
@@ -442,7 +484,7 @@
 
   <Group>
     <GroupName>DRIVER</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

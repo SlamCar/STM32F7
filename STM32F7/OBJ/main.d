@@ -77,6 +77,7 @@
 .\obj\main.o: .\CORE\core_cm7.h
 .\obj\main.o: .\HALLIB\Inc\stm32f7xx_hal.h
 .\obj\main.o: USER\Data_Base.h
+.\obj\main.o: USER\Protocal.h
 .\obj\main.o: .\SYSTEM\delay\delay.h
 .\obj\main.o: .\OS\STM32\RTOS\UCOSIII\UCOS-CONFIG\includes.h
 .\obj\main.o: D:\ARM\ARM\ARMCC\Bin\..\include\string.h
@@ -103,6 +104,5 @@
 .\obj\main.o: .\OS\STM32\RTOS\UCOSIII\UCOS-BSP\bsp.h
 .\obj\main.o: .\DRIVER\LED\led.h
 .\obj\main.o: .\DRIVER\KEY\key.h
-.\obj\main.o: USER\Protocal.h
 .\obj\main.o: .\DRIVER\UART\UART_Interface.h
 .\obj\main.o: USER\transport.h

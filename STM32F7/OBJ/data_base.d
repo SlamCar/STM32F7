@@ -77,3 +77,4 @@
 .\obj\data_base.o: .\HALLIB\Inc\stm32f7xx_hal_mdios.h
 .\obj\data_base.o: .\CORE\core_cm7.h
 .\obj\data_base.o: .\HALLIB\Inc\stm32f7xx_hal.h
+.\obj\data_base.o: USER\Protocal.h
