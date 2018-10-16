@@ -142,8 +142,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         {
             uint8_t data = s_byUartRxdBuf[dwDevice][0];
             static uint8_t flag = 0;
-            static uint8_t data_len = 0;
-            static uint8_t recv_len = 0;
             switch(flag)
             {
             /***moduleId***/
@@ -182,13 +180,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             /***dataLen***/
             case 4:
                 memcpy(++p_pack, &data, 1);
-                data_len = data; 
+                g_SerialPackRX.head_.dataLen = data; 
                 flag ++;
                 break;
             /***recvLen***/
             case 5:
                 memcpy(++p_pack, &data, 1); 
-                if(0 == data_len)
+                if(0 == g_SerialPackRX.head_.dataLen)
                 {
                    flag = 7;
                 }
@@ -196,22 +194,19 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                 break;
             /***data***/
             case 6:
-                if(recv_len < data_len)
+                if(g_SerialPackRX.head_.recvLen < g_SerialPackRX.head_.dataLen)
                 {
-                   //g_SerialPackRX.head_.recvLen++; 
-                    recv_len ++;
+                    g_SerialPackRX.head_.recvLen++; 
                     memcpy(++p_pack, &data, 1);
                 }
                 
-                if(recv_len == data_len)
+                if(g_SerialPackRX.head_.recvLen == g_SerialPackRX.head_.dataLen)
                 {
                    flag = 7;
                 }
-                else if(recv_len > data_len)
+                else if(g_SerialPackRX.head_.recvLen > g_SerialPackRX.head_.dataLen)
                 {
                   flag = 0;    //data error
-                  recv_len = 0;
-                  data_len = 0;
                   memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
                 }
                 break;                 
@@ -225,8 +220,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             case 8:
                 //memcpy(++p_pack, &data, 1);
                 g_SerialPackRX.check_ |= (uint16_t)data << 8 ;
-                recv_len = 0;
-                data_len = 0;
                 flag = 0;
                 rec_flag = 1;
                 break;

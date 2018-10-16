@@ -137,6 +137,7 @@ void start_task(void *p_arg)
 
 void Communicate_task(void *p_arg)
 {
+    u8 t = 0;
     OS_ERR err = OS_ERR_NONE;
     //UNSED(p_arg);
     LED_Init();
@@ -148,13 +149,12 @@ void Communicate_task(void *p_arg)
     
     while(1) 
     {
-        
         //OSTimeDly(10u, OS_OPT_TIME_PERIODIC, &err);
-        
         if(db_cmd_update)
         {    
             //大小端转化
             EndianTrans();
+            
             switch(g_SerialPackRX.head_.dataId)
             {
                 case CMD_IPC_COMMOND:
@@ -173,35 +173,38 @@ void Communicate_task(void *p_arg)
             db_cmd_update = FALSE;
         }
         
-        
         if(rec_flag)
         {
-            /*
-            printf("\r\n----- Head: -----\r\n\r\n"); 
-            printf("moduleId: %X\r\n",g_SerialPackRX.head_.moduleId);
-            printf("dataId: %X\r\n",g_SerialPackRX.head_.dataId);
-            printf("dataLen: %X\r\n",g_SerialPackRX.head_.dataLen);
+            #if 1
+            EndianTrans();
+            printf("\r\n********************\r\n");
+            printf("\r\n ____Head____ \r\n\r\n"); 
+            printf(" moduleId: %02X\r\n",g_SerialPackRX.head_.moduleId);
+            printf(" dataId: %01X\r\n",g_SerialPackRX.head_.dataId);
+            printf(" dataLen: %01X\r\n",g_SerialPackRX.head_.dataLen);
             
-            printf("\r\n----- Data: -----\r\n\r\n");  
+            printf("\r\n ____Data____ \r\n\r\n");
+            printf(" byData:");           
             for(t=0; t<g_SerialPackRX.head_.dataLen; ++t)
             {
-                printf("check:%X",g_SerialPackRX.byData_[t]);
+                printf("%01X",g_SerialPackRX.byData_[t]);
             }
+            printf("\r\n");
+            printf("\r\n ____Crc____ \r\n\r\n");
+            printf(" check: %02X\r\n",g_SerialPackRX.check_);
+            printf("\r\n********************\r\n");            
+            #endif
             
-            printf("\r\n----- Crc: -----\r\n\r\n");
-            printf("check: %X\r\n",g_SerialPackRX.check_); 
-            */
-           // HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&g_SerialPackRX.head_.dataLen,1,1000);  // send  dataLen
-            
+            #if 0
             HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&g_SerialPackRX,g_SerialPackRX.head_.dataLen+6,1000); //  send data
             HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&g_SerialPackRX.check_,2,1000);       //send  crc
             while(__HAL_UART_GET_FLAG(&UART_Handler[UART_DEV1],UART_FLAG_TC)!=SET);               //wait  untill send end
+            #endif
             
-            memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));     //clear data
             rec_flag = 0;
+            memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));     //clear data
         }
         OSTimeDlyHMSM(0,0,0,20,OS_OPT_TIME_HMSM_STRICT,&err); //延时200ms
-        //Data_Process(&SerialPackRX);
     }
 }
 

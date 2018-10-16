@@ -112,10 +112,10 @@ Bool feedMsgPack(Feedback_Msg msg)
 
 Bool EndianTrans()
 {
-    memrev16((void *)&g_SerialPackTX.head_.moduleId);
-    memrev16((void *)&g_SerialPackTX.head_.dataId);
-    memrev32((void *)&g_SerialPackTX.byData_);
-    memrev32((void *)&g_SerialPackTX.byData_[3]);
-    memrev16((void *)&g_SerialPackTX.check_);
+    memrev16((void *)&g_SerialPackRX.head_.moduleId);
+    memrev16((void *)&g_SerialPackRX.head_.dataId);
+    memrev32((void *)&g_SerialPackRX.byData_);
+    memrev32((void *)&g_SerialPackRX.byData_[3]);
+    memrev16((void *)&g_SerialPackRX.check_);
 }
 
