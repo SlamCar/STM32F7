@@ -3,8 +3,9 @@
 #include "sys.h"
 
 #define     HEAD_BYTESIZE      6
+#define     BODY_MAX_BYTESIZE  8
 #define     CRC_BYTESIZE       2
-#define     BODY_MAX_BYTESIZE  50
+
 
 #define     MODULEID           0x039c
 

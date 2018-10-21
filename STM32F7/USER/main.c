@@ -7,6 +7,8 @@
 #include "Protocal.h"
 #include "UART_Interface.h"
 #include "transport.h"
+
+#define DEBUG 0
   
 SerialPakage g_SerialPackRX = {0};
 SerialPakage g_SerialPackTX = {0};
@@ -142,37 +144,49 @@ void Communicate_task(void *p_arg)
     //UNSED(p_arg);
     LED_Init();
     UART_Init(UART_DEV1, 115200u, UART_WORDLENGTH_8B, UART_STOPBITS_1, UART_PARITY_NONE);
-
     // wait for serial communication to be established successfully(IPC running)
    // OSTimeDlyHMSM(0, 0, 3, 0, OS_OPT_TIME_DLY, &err);
     //printf("\r\n wait IPC...... \r\n");
     
     while(1) 
     {
-        //OSTimeDly(10u, OS_OPT_TIME_PERIODIC, &err);
-        if(db_cmd_update)
-        {    
-            //大小端转化
-            EndianTrans();
-            
-            switch(g_SerialPackRX.head_.dataId)
-            {
-                case CMD_IPC_COMMOND:
-                    //g_SerialPackRX --> db_controlMsg
-                    memcpy((uint8_t *)&db_controlMsg, &g_SerialPackRX.byData_, sizeof(Control_Msg));
-                    break;
-                
-                case DEBUG_QT_COMMOND:
-                    //g_SerialPackRX --> db_controlMsg
-                    memcpy((uint8_t *)&db_controlMsg, &g_SerialPackRX.byData_, sizeof(Control_Msg));
-                    break;
-                    
-            
-            }                
-            //database finish update
-            db_cmd_update = FALSE;
-        }
+        OSTimeDly(10, OS_OPT_TIME_PERIODIC, &err);
+        #if 1
         
+        if(feedMsgPack(db_feedbackMsg))
+        {
+            // 大小端转化
+            //EndianTrans();
+            //  send data 
+//            while(HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&g_SerialPackTX, 
+//                              HEAD_BYTESIZE + BODY_MAX_BYTESIZE + CRC_BYTESIZE ,1000) != HAL_OK);
+           HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&g_SerialPackTX, 
+                              HEAD_BYTESIZE + BODY_MAX_BYTESIZE + CRC_BYTESIZE ,1000);
+            
+           while(__HAL_UART_GET_FLAG(&UART_Handler[UART_DEV1],UART_FLAG_TC)!=SET);    //wait  untill send end 
+            memset(&g_SerialPackTX, 0 , sizeof(SerialPakage));     //clear data
+        }
+        #endif
+//        if(db_cmd_update)
+//        {    
+//            //大小端转化
+//            EndianTrans();
+//            switch(g_SerialPackRX.head_.dataId)
+//            {
+//                case CMD_IPC_COMMOND:
+//                    //g_SerialPackRX --> db_controlMsg
+//                    memcpy((uint8_t *)&db_controlMsg, &g_SerialPackRX.byData_, sizeof(Control_Msg));
+//                    break;
+//                
+//                case DEBUG_QT_COMMOND:
+//                    //g_SerialPackRX --> db_controlMsg
+//                    memcpy((uint8_t *)&db_controlMsg, &g_SerialPackRX.byData_, sizeof(Control_Msg));
+//                    break;
+//            }                
+//            //database finish update
+//            db_cmd_update = FALSE;
+//        }
+#if DEBUG
         if(rec_flag)
         {
             #if 1
@@ -204,6 +218,7 @@ void Communicate_task(void *p_arg)
             rec_flag = 0;
             memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));     //clear data
         }
+#endif
         OSTimeDlyHMSM(0,0,0,20,OS_OPT_TIME_HMSM_STRICT,&err); //延时200ms
     }
 }
@@ -213,39 +228,25 @@ void Manual_task(void *p_arg)
     OS_ERR err = OS_ERR_NONE;
     u8 key = 0;
     
+    db_feedbackMsg.now_speed = 0.0;
+    db_feedbackMsg.now_angle = 0.0;
+    
     KEY_Init();
     while(1)
     {
+        
         OSTimeDly(10u, OS_OPT_TIME_PERIODIC, &err);
         key = KEY_Scan(0);
         switch(key)
         {
-            
-            
             /***feedback test***/
-            case KEY0_PRES: 
-                db_feedbackMsg.now_speed = 1.23;
-                db_feedbackMsg.now_angle = 5.88;
-
-                if(feedMsgPack(db_feedbackMsg))
-                {
-                    // 大小端转化
-                    //EndianTrans();
-                    //  send data 
-                    HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&g_SerialPackTX, 
-                                  HEAD_BYTESIZE+g_SerialPackTX.head_.dataLen,1000);
-                    HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&g_SerialPackTX.check_, 
-                                  CRC_BYTESIZE,1000);            
-                    while(__HAL_UART_GET_FLAG(&UART_Handler[UART_DEV1],UART_FLAG_TC)!=SET);    //wait  untill send end 
-                }
-                
+            case KEY0_PRES: db_feedbackMsg.now_speed ++;
                 break;
-            
-            case KEY1_PRES: printf("\r\n 1 \r\n");
+            case KEY1_PRES: db_feedbackMsg.now_angle ++;
                 break;
-            case KEY2_PRES: printf("\r\n 2 \r\n");
+            case KEY2_PRES: db_feedbackMsg.now_speed --;
                 break;
-            case WKUP_PRES: printf("\r\n 3 \r\n");
+            case WKUP_PRES: db_feedbackMsg.now_angle --;
                 break;  
         }
     }

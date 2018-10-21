@@ -222,6 +222,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                 g_SerialPackRX.check_ |= (uint16_t)data << 8 ;
                 flag = 0;
                 rec_flag = 1;
+                //db_cmd_update = TRUE;
                 break;
             case 53:
                 break;

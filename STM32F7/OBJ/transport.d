@@ -79,3 +79,4 @@
 .\obj\transport.o: .\CORE\core_cm7.h
 .\obj\transport.o: .\HALLIB\Inc\stm32f7xx_hal.h
 .\obj\transport.o: USER\Protocal.h
+.\obj\transport.o: D:\ARM\ARM\ARMCC\Bin\..\include\string.h

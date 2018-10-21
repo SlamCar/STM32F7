@@ -1,7 +1,7 @@
 #include "Data_Base.h"
 
-Feedback_Msg db_feedbackMsg;
-Control_Msg db_controlMsg;
+Feedback_Msg db_feedbackMsg = {0};
+Control_Msg db_controlMsg = {0};
 
 ROBOT_Input   g_ROBOT_Input = {0};
 

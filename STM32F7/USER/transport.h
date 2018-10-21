@@ -4,6 +4,7 @@
 #include "Data_Base.h"
 #include "Protocal.h"
 #include "sys.h"
+#include <string.h>
 
 //FLOAR <--> HEX
 typedef  union{
@@ -11,9 +12,10 @@ typedef  union{
         uint8_t cv[4];
 }float_union;
 
-enum Receive_State
+typedef enum RECSTATE
 {
-    MODULE_ID_H = 0,
+    NONE = 0,
+    MODULE_ID_H,
     MODULE_ID_L,
     DATA_ID_H,
     DATA_ID_L,
@@ -22,10 +24,10 @@ enum Receive_State
     BYDATA,
     CRC_H,
     CRC_L
-};
+}Receive_State;
 
 Bool feedMsgPack(Feedback_Msg msg);
-int dataCheck(uint8_t * data);
+int dataCheck(uint8_t data);
 
 Bool EndianTrans();
 

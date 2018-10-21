@@ -3,66 +3,76 @@
 extern  SerialPakage g_SerialPackRX;
 extern  SerialPakage g_SerialPackTX;
 
-int dataCheck(uint8_t * data)
+//Receive_State rec_flag = NONE;
+
+int dataCheck(uint8_t data)
 {
-    static uint8_t flag = 0;
-    uint8_t* p_data =  (uint8_t *)&g_SerialPackRX;
-    
-    switch(flag)
+#if 0    
+    switch(rec_flag)
     {
-     /***moduleId***/
-        case 0:
+        case NONE:
+            rec_flag = MODULE_ID_H
+            break;
+        
+/********************moduleId********************/
+        
+        case MODULE_ID_H:
             //memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
-           if(0x03 == *data)
+           if(0x03 == data)
            {
               p_data =  (uint8_t *)&g_SerialPackRX;
               memcpy(p_data, data, 1);
-              flag ++;
+              rec_flag = MODULE_ID_L;
            }
             else 
-              flag = 0;
-        break;
-        
-        case 1:
-            if(0x9c == *data)
+              rec_flag = 0;
+        break;                                     
+        case MODULE_ID_L:
+            if(0x9c == data)
             {
-               memcpy(++p_data, data, 1); 
-               flag ++;
+               memcpy(++p_data, &data, 1); 
+               rec_flag = DATA_ID_H;
             }
             else
             {
-               flag = 0;
+               rec_flag = NONE;
                memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
             }
             break;
-        /***dataId***/    
-        case 2:  
-            memcpy(++p_data, data, 1); 
-            flag ++;
+            
+/********************dataId********************/ 
+            
+        case DATA_ID_H:  
+            memcpy(++p_data, &data, 1); 
+            rec_flag = DATA_ID_L;
             break;
-        case 3:
-            memcpy(++p_data, data, 1);
-            flag ++;                
+        case DATA_ID_L:
+            memcpy(++p_data, &data, 1);
+            rec_flag = DATA_LEN;                
             break;
-        /***dataLen***/
-        case 4:
-            memcpy(++p_data, data, 1);
-            flag ++;
+        
+/********************dataLen********************/
+
+        case DATA_LEN:
+            memcpy(++p_data, &data, 1);
+            rec_flag = RECVLEN;
             break;
         /***recvLen***/
-        case 5:
-            memcpy(++p_data, data, 1); 
+        case RECVLEN:
+            memcpy(++p_data, &data, 1); 
             if(0 == g_SerialPackRX.head_.dataLen)
             {
-               flag = 7;
+               rec_flag = CRC_H;
             }
-            else flag ++;  
+            else rec_flag ++;  
             break;
-        /***data***/
-        case 6: 
+            
+/********************data********************/
+        
+        case BYDATA: 
             if(g_SerialPackRX.head_.dataLen == g_SerialPackRX.head_.recvLen)
             {
-               flag = 7;
+               rec_flag = CRC_H;
             }
             
             if(g_SerialPackRX.head_.recvLen < g_SerialPackRX.head_.dataLen)
@@ -72,41 +82,52 @@ int dataCheck(uint8_t * data)
             }
             else
             {
-              flag = 0;    //data error
+              rec_flag = 0;    //data error
               memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
             }
             break;
-        /***crc L***/
-        case 7:
+            
+/******************** crc ********************/
+            
+        case CRC_H:
             memcpy(++p_data, &data, 1);
             //g_SerialPackRX.check_ = (uint16_t)data;
-            flag ++;
+            rec_flag ++;
             break;
-        /***crc H***/
-        case 8:
+        case CRC_L:
             memcpy(++p_data, &data, 1);
             //g_SerialPackRX.check_ = (uint16_t)data << 8;
             //校验成功 db_cmd_update 打开
-            flag = 0;
+            rec_flag = 0;
            // rec_flag = 1;
             break;
-        case 53:
+        
+        default:
             break;
     }
+
+#endif
 
     return 0;
 }
 
 Bool feedMsgPack(Feedback_Msg msg)
 {
+    u8 t = 0;
+    uint8_t* data = (uint8_t *)&g_SerialPackTX;
+    
+    memset(&g_SerialPackTX, 0 , sizeof(SerialPakage));     //clear data
     g_SerialPackTX.head_.moduleId = 0X039Cu;
     g_SerialPackTX.head_.dataId = 0X5010u;
     g_SerialPackTX.head_.dataLen = sizeof(Feedback_Msg);
     g_SerialPackTX.head_.recvLen = 0X00u;
     memcpy((uint8_t *)&g_SerialPackTX.byData_,(uint8_t *)&msg,sizeof(Feedback_Msg));
-
     
-    g_SerialPackTX.check_ = 0X1234u;
+    for(t=0; t < HEAD_BYTESIZE + g_SerialPackTX.head_.dataLen; t++)
+    {
+        g_SerialPackTX.check_ += data[t];
+    }
+    //g_SerialPackTX.check_ = 0X1234u;
     return TRUE;
 }
 
