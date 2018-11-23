@@ -5,14 +5,14 @@ Control_Msg db_controlMsg = {0};
 
 ROBOT_Input   g_ROBOT_Input = {0};
 
-void Update_CmdMsg()
+void Update_CmdMsg(const SerialPakage msg)
 {
     //memcpy(&g_ROBOT_Input.control_msg, &); 
 }
 
-void Update_FeedbackMsg()
-{
-}
+//void Update_FeedbackMsg(const Feedback_Msg msg)
+//{
+//}
 
 /*
 void ROBOT_Input(ROBOT_Input *Input)

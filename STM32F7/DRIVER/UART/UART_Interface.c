@@ -1,13 +1,9 @@
 
 #include "UART_Interface.h"
-#include "delay.h"
-#include "Protocal.h"
-#include "os.h"
-#include <string.h>
 
-extern SerialPakage g_SerialPackRX ;
-extern SerialPakage g_SerialPackTX ;
-uint8_t* p_pack =  (uint8_t *)&g_SerialPackRX;
+//extern SerialPakage g_SerialPackRX ;
+//extern SerialPakage g_SerialPackTX ;
+//uint8_t* p_pack =  (uint8_t *)&g_SerialPackRX;
 
 u8 rec_flag = 0;
 
@@ -37,7 +33,7 @@ int fputc(int ch, FILE *f)
 }
 #endif 
 
-APP_UART_MSG g_sUartAppRxd[UART_NUM];
+UART_MSG g_sUartAppRxd[UART_NUM];
 
 UART_HandleTypeDef      UART_Handler[UART_NUM];
 DMA_HandleTypeDef       UART1RxDMA_Handler;
@@ -48,7 +44,7 @@ static u8               s_byUartRxdBuf[UART_NUM][USART_RECLEN_TRIG_HOOK];
 
 void UART_Init(u32 dwDevice, u32 dwbound, u32 WordLength, u32 dwStopBits, u32 dwParity)
 {
-    memset((u8 *)&g_sUartAppRxd[dwDevice], 0, sizeof(APP_UART_MSG));
+    memset((u8 *)&g_sUartAppRxd[dwDevice], 0, sizeof(UART_MSG));
     
     UART_Handler[dwDevice].Instance         = pUART_BASE_ADDR[dwDevice];
     UART_Handler[dwDevice].Init.BaudRate    = dwbound;                  
@@ -120,8 +116,6 @@ static u32 UART_GetDevice(UART_HandleTypeDef *huart)
     }
 }  
 
-extern SerialPakage SerialPackRX;
-
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     u16 wLen;
@@ -140,102 +134,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
         if (USART1 == huart->Instance)
         {
-            uint8_t data = s_byUartRxdBuf[dwDevice][0];
-            static uint8_t flag = 0;
-            switch(flag)
-            {
-            /***moduleId***/
-            case 0:
-                //memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
-                if(0x03 == data)
-                {
-                   p_pack =  (uint8_t *)&g_SerialPackRX;
-                   memcpy(p_pack, &data, 1);
-                   flag ++;
-                }
-                else 
-                    flag = 0;
-                break;
-            case 1:
-                if(0x9c == data)
-                {
-                   memcpy(++p_pack, &data, 1); 
-                   flag ++;
-                }
-                else
-                {
-                    flag = 0;
-                    memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
-                }
-                break;
-            /***dataId***/    
-            case 2:  
-                memcpy(++p_pack, &data, 1); 
-                flag ++;
-                break;
-            case 3:
-                memcpy(++p_pack, &data, 1);
-                flag ++;                
-                break;
-            /***dataLen***/
-            case 4:
-                memcpy(++p_pack, &data, 1);
-                g_SerialPackRX.head_.dataLen = data; 
-                flag ++;
-                break;
-            /***recvLen***/
-            case 5:
-                memcpy(++p_pack, &data, 1); 
-                if(0 == g_SerialPackRX.head_.dataLen)
-                {
-                   flag = 7;
-                }
-                else flag ++;  
-                break;
-            /***data***/
-            case 6:
-                if(g_SerialPackRX.head_.recvLen < g_SerialPackRX.head_.dataLen)
-                {
-                    g_SerialPackRX.head_.recvLen++; 
-                    memcpy(++p_pack, &data, 1);
-                }
-                
-                if(g_SerialPackRX.head_.recvLen == g_SerialPackRX.head_.dataLen)
-                {
-                   flag = 7;
-                }
-                else if(g_SerialPackRX.head_.recvLen > g_SerialPackRX.head_.dataLen)
-                {
-                  flag = 0;    //data error
-                  memset(&g_SerialPackRX, 0 , sizeof(SerialPakage));
-                }
-                break;                 
-            /***crc L***/
-            case 7:
-                //memcpy(++p_pack, &data, 1);
-                g_SerialPackRX.check_ |= (uint16_t)data;
-                flag ++;
-                break;
-            /***crc H***/
-            case 8:
-                //memcpy(++p_pack, &data, 1);
-                g_SerialPackRX.check_ |= (uint16_t)data << 8 ;
-                flag = 0;
-                rec_flag = 1;
-                //db_cmd_update = TRUE;
-                break;
-            case 53:
-                break;
-            }
+           memcpy(&g_sUartAppRxd[dwDevice].byRxdBuf[wLen], &s_byUartRxdBuf[dwDevice][0], USART_RECLEN_TRIG_HOOK);
+           g_sUartAppRxd[dwDevice].wRxdLen += USART_RECLEN_TRIG_HOOK; 
         }
-        else
-        {
-            ;
-        }
-    }
-    else
-    {
-        ;
     }
 }
 
@@ -433,5 +334,21 @@ void DMA_USART_Transmit(UART_HandleTypeDef *huart, DMA_HandleTypeDef *hmdatx, ui
    
     //huart->Instance->CR3 |= USART_CR3_DMAT;
 }
+
+Bool UART_RxdWatch(u32 dwDevice, u32 dwTimeOut)
+{
+    if(g_sUartAppRxd[dwDevice].wRxdLen == 0)
+    {
+        return FALSE;   
+    }
+    if(Delay_IsTimeOut(g_sUartAppRxd[dwDevice].dwTick, dwTimeOut))
+    {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+
+
 
 

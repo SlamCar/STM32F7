@@ -1,12 +1,102 @@
 #include "transport.h"
 
-extern  SerialPakage g_SerialPackRX;
-extern  SerialPakage g_SerialPackTX;
-
-//Receive_State rec_flag = NONE;
-
-int dataCheck(uint8_t data)
+void getMsg(void)
 {
+    if (UART_RxdWatch(UART_DEV1, 10))
+    {
+        UART_MSG sUartAppRxd = {0};
+
+        INTX_DISABLE();
+        sUartAppRxd = g_sUartAppRxd[UART_DEV1];
+        g_sUartAppRxd[UART_DEV1].wRxdLen = 0;
+        INTX_ENABLE();
+        
+        dataReceive(&sUartAppRxd);
+    }
+}
+
+void sendMsg(void)
+{
+    SerialPakage msg = {0};
+    msg = feedMsgPack(db_feedbackMsg);
+    
+    EndianTrans(msg);
+    
+    HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&msg, 
+                       HEAD_BYTESIZE + sizeof(Feedback_Msg) + CRC_BYTESIZE ,1000);
+    
+    while(__HAL_UART_GET_FLAG(&UART_Handler[UART_DEV1],UART_FLAG_TC)!=SET){};    //wait  untill send end 
+    memset(&msg, 0 , sizeof(SerialPakage));     //clear data    
+}
+
+void dataReceive(const UART_MSG *uart_msg)
+{
+    SerialPakage msg = {0};
+    if(uart_msg->wRxdLen > HEAD_BYTESIZE + BODY_MAX_BYTESIZE + CRC_BYTESIZE)
+    {
+        return;
+    }
+    memcpy(&msg, uart_msg->byRxdBuf, uart_msg->wRxdLen);
+    
+    EndianTrans(msg);
+    
+    if(checkCrc(msg))
+    {
+       //update dataBase 
+    }
+}
+
+Bool checkCrc(SerialPakage msg)
+{
+    uint16_t msgCrc = 0;
+    uint16_t crc = 0;
+    
+    memcpy(&msgCrc,&msg.byData_[msg.head_.dataLen],CRC_BYTESIZE);
+    crc = generateCrc(msg);
+    
+    return crc == msgCrc ? TRUE : FALSE;
+}
+
+uint16_t generateCrc(SerialPakage msg)
+{
+    u8 t = 0;
+    uint8_t* data = (uint8_t *)&msg;
+    uint16_t crc = 0;
+    for(t=0; t < HEAD_BYTESIZE + msg.head_.dataLen; t++)
+    {
+        crc += data[t];
+    }
+    return crc;
+}
+
+SerialPakage feedMsgPack(Feedback_Msg feedbackMsg)
+{
+    uint16_t crc = 0;
+    SerialPakage pack = {0};
+    
+    pack.head_.moduleId = 0X039Cu;
+    pack.head_.dataId = 0X5010u;
+    pack.head_.dataLen = sizeof(Feedback_Msg);
+    pack.head_.recvLen = 0X00u;
+    memcpy((uint8_t *)&pack.byData_,(uint8_t *)&feedbackMsg,sizeof(Feedback_Msg));
+    
+    crc = generateCrc(pack);
+    memcpy((uint8_t *)&pack.byData_[pack.head_.dataLen],(uint8_t *)&crc,CRC_BYTESIZE);
+    
+    return pack;
+}
+
+
+void EndianTrans(SerialPakage pack)
+{
+    memrev16((void *)&pack.head_.moduleId);
+    memrev16((void *)&pack.head_.dataId);
+    memrev32((void *)&pack.byData_);
+    memrev32((void *)&pack.byData_[3]);
+    memrev16((void *)&pack.byData_[7]);
+}
+
+
 #if 0    
     switch(rec_flag)
     {
@@ -108,35 +198,4 @@ int dataCheck(uint8_t data)
 
 #endif
 
-    return 0;
-}
-
-Bool feedMsgPack(Feedback_Msg msg)
-{
-    u8 t = 0;
-    uint8_t* data = (uint8_t *)&g_SerialPackTX;
-    
-    memset(&g_SerialPackTX, 0 , sizeof(SerialPakage));     //clear data
-    g_SerialPackTX.head_.moduleId = 0X039Cu;
-    g_SerialPackTX.head_.dataId = 0X5010u;
-    g_SerialPackTX.head_.dataLen = sizeof(Feedback_Msg);
-    g_SerialPackTX.head_.recvLen = 0X00u;
-    memcpy((uint8_t *)&g_SerialPackTX.byData_,(uint8_t *)&msg,sizeof(Feedback_Msg));
-    
-    for(t=0; t < HEAD_BYTESIZE + g_SerialPackTX.head_.dataLen; t++)
-    {
-        g_SerialPackTX.check_ += data[t];
-    }
-    //g_SerialPackTX.check_ = 0X1234u;
-    return TRUE;
-}
-
-Bool EndianTrans()
-{
-    memrev16((void *)&g_SerialPackRX.head_.moduleId);
-    memrev16((void *)&g_SerialPackRX.head_.dataId);
-    memrev32((void *)&g_SerialPackRX.byData_);
-    memrev32((void *)&g_SerialPackRX.byData_[3]);
-    memrev16((void *)&g_SerialPackRX.check_);
-}
 
