@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F767xx</Define>
               <Undefine></Undefine>
-              <IncludePath>.\USER;.\CORE;.\SYSTEM\sys;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\HALLIB\Inc;.\OS\STM32\RTOS\UCOSIII\uC-LIB;.\OS\STM32\RTOS\UCOSIII\uC-CPU;.\OS\STM32\RTOS\UCOSIII\UCOS-BSP;.\OS\STM32\RTOS\UCOSIII\UCOS-CONFIG;.\OS\STM32\RTOS\UCOSIII\uCOS-III\Source;.\OS\STM32\RTOS\UCOSIII\uC-CPU\ARM-Cortex-M4\RealView;.\OS\STM32\RTOS\UCOSIII\uC-LIB\Ports\ARM-Cortex-M4\RealView;.\OS\STM32\RTOS\UCOSIII\uCOS-III\Ports\ARM-Cortex-M4\Generic\RealView;.\DRIVER\LED;.\DRIVER\KEY;.\DRIVER\UART</IncludePath>
+              <IncludePath>.\USER;.\CORE;.\SYSTEM\sys;.\SYSTEM\sys;.\SYSTEM\usart;.\SYSTEM\delay;.\HALLIB\Inc;.\OS\STM32\RTOS\UCOSIII\uC-LIB;.\OS\STM32\RTOS\UCOSIII\uC-CPU;.\OS\STM32\RTOS\UCOSIII\UCOS-BSP;.\OS\STM32\RTOS\UCOSIII\UCOS-CONFIG;.\OS\STM32\RTOS\UCOSIII\uCOS-III\Source;.\OS\STM32\RTOS\UCOSIII\uC-CPU\ARM-Cortex-M4\RealView;.\OS\STM32\RTOS\UCOSIII\uC-LIB\Ports\ARM-Cortex-M4\RealView;.\OS\STM32\RTOS\UCOSIII\uCOS-III\Ports\ARM-Cortex-M4\Generic\RealView;.\DRIVER\LED;.\DRIVER\KEY;.\DRIVER\UART</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

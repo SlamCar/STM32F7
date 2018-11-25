@@ -3,9 +3,11 @@
 #define __UART_INTERFACE_H
 
 #include "sys.h"
+#include "delay.h"
+#include "Protocal.h"
+#include "os.h"
+#include <string.h>
 
-#define USART_REC_LEN        100    //定义最大接收字节数 200
-extern u8 USART_RX_BUF[USART_REC_LEN];
 #define UART_NUM                0x08u
 
 #define UART_DEV1               0x00u
@@ -27,16 +29,17 @@ typedef struct
     u8  byRsv1;
     u16 wRxdLen;
     u8  byRxdBuf[USART_REC_MAXLEN]; 
- }APP_UART_MSG;
+ }UART_MSG;
 
-extern APP_UART_MSG          g_sUartAppRxd[UART_NUM];
+extern UART_MSG              g_sUartAppRxd[UART_NUM];
 extern UART_HandleTypeDef    UART_Handler[];
 extern DMA_HandleTypeDef     UART1RxDMA_Handler;
 
  
 void UART_Init(u32 dwDevice, u32 dwbound, u32 WordLength, u32 dwStopBits, u32 dwParity);
 void UART_SendByte(u32 dwDevice, u8 *pData, u16 wLen, u32 dwTimeOut);
-void UART_RecvDataProc(u32 dwDevice, u8 *pRxdData, u16 wRxdLen);
+ 
+Bool UART_RxdWatch(u32 dwDevice, u32 dwTimeOut);
  
 void UART_DMA_init(UART_HandleTypeDef *uart_handler);
 void DMA_USART_Transmit(UART_HandleTypeDef *huart, DMA_HandleTypeDef *hmdatx, uint8_t *pData, uint16_t Size);

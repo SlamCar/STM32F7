@@ -5,8 +5,11 @@
 
 static Bool db_cmd_update = FALSE;
 
-extern  SerialPakage g_SerialPackRX;
-extern  SerialPakage g_SerialPackTX;
+typedef enum 
+{
+    RECEIVE_OK = 0,
+    SEND_DATA
+}COMMUNCATE_STATE;
 
 typedef struct
 {
@@ -70,9 +73,9 @@ extern  ROBOT_Output  g_ROBOT_Output;
 //void ROBOT_RunCtr(ROBOT_Input *Input, ROBOT_Output *Output);
 //void ROBOT_Output(ROBOT_Output* Output);
 
-void Update_CmdMsg();
-void Update_Param();
-void Update_FeedbackMsg();
+void Update_CmdMsg(const SerialPakage msg);
+//void Update_Param(const );
+//void Update_FeedbackMsg(const );
 
 
 

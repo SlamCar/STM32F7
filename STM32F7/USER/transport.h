@@ -3,6 +3,7 @@
 
 #include "Data_Base.h"
 #include "Protocal.h"
+#include "UART_Interface.h"
 #include "sys.h"
 #include <string.h>
 
@@ -26,10 +27,16 @@ typedef enum RECSTATE
     CRC_L
 }Receive_State;
 
-Bool feedMsgPack(Feedback_Msg msg);
-int dataCheck(uint8_t data);
+void getMsg(void);
+void sendMsg(void);
 
-Bool EndianTrans();
+void dataReceive(const UART_MSG *uart_msg);
+
+Bool checkCrc(SerialPakage msg); 
+uint16_t generateCrc(SerialPakage msg);
+
+SerialPakage feedMsgPack(Feedback_Msg feedbackMsg);
+void EndianTrans(SerialPakage msg);
 
 
 

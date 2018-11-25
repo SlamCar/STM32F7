@@ -3,7 +3,7 @@
 #include "sys.h"
 
 #define     HEAD_BYTESIZE      6
-#define     BODY_MAX_BYTESIZE  8
+#define     BODY_MAX_BYTESIZE  20
 #define     CRC_BYTESIZE       2
 
 
@@ -44,8 +44,7 @@ typedef struct DataHead_
 typedef struct SerialPackage_
 {
     Head head_;                         // 6 bype
-    uint8_t byData_[BODY_MAX_BYTESIZE]; // data content, max size is 50
-    uint16_t check_;                    // append crc16
+    uint8_t byData_[BODY_MAX_BYTESIZE + CRC_BYTESIZE]; // data content, max size is 50
 } SerialPakage;
   
 #endif

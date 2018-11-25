@@ -148,6 +148,31 @@ void delay_ms(u16 nms)
 	}
 	delay_us((u32)(nms*1000));				//普通方式延时
 }
+
+
+Bool Delay_IsTimeOut(u32 dwTickstart, u32 dwTimeOut)
+{
+    u32 dwTime = 0;
+
+    dwTime = HAL_GetTick();
+
+    if (dwTime > dwTickstart)
+    {
+        if (dwTime - dwTickstart > dwTimeOut)
+        {
+            return TRUE;
+        }
+    }
+    else
+    {
+        if (dwTime > dwTickstart + dwTimeOut)
+        {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 #else  //不用ucos时
 //延时nus
 //nus为要延时的us数.	
@@ -176,8 +201,8 @@ void delay_us(u32 nus)
 //nms:要延时的ms数
 void delay_ms(u16 nms)
 {
-	u32 i;
-	for(i=0;i<nms;i++) delay_us(1000);
+    u32 i;
+    for(i=0;i<nms;i++) delay_us(1000);
 }
 
 #endif
