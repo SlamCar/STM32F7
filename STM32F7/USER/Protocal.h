@@ -44,7 +44,7 @@ typedef struct DataHead_
 typedef struct SerialPackage_
 {
     Head head_;                         // 6 bype
-    uint8_t byData_[BODY_MAX_BYTESIZE + CRC_BYTESIZE]; // data content, max size is 50
+    uint8_t byData_[BODY_MAX_BYTESIZE + CRC_BYTESIZE]; // data content, max size is 22
 } SerialPakage;
   
 #endif

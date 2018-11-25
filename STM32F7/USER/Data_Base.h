@@ -2,6 +2,7 @@
 #define __DATA_BASE_H
 #include "sys.h"
 #include "Protocal.h"
+#include <string.h>
 
 static Bool db_cmd_update = FALSE;
 
