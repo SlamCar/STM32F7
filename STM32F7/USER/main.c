@@ -136,13 +136,10 @@ void Communicate_task(void *p_arg)
     //UNSED(p_arg);
     // wait for serial communication to be established successfully(IPC running)
    // OSTimeDlyHMSM(0, 0, 3, 0, OS_OPT_TIME_DLY, &err);
-    //printf("\r\n wait IPC...... \r\n");
-    
     /*
     ** data init
     */
-//    SerialPakage g_SerialPackRX = {0};
-//    SerialPakage g_SerialPackTX = {0};
+    dataBaseInit();
     /*
     ** usart init
     */

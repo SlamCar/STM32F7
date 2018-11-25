@@ -74,6 +74,7 @@ extern  ROBOT_Output  g_ROBOT_Output;
 //void ROBOT_RunCtr(ROBOT_Input *Input, ROBOT_Output *Output);
 //void ROBOT_Output(ROBOT_Output* Output);
 
+void dataBaseInit();
 void Update_CmdMsg(const SerialPakage msg);
 //void Update_Param(const );
 //void Update_FeedbackMsg(const );
