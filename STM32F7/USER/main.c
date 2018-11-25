@@ -136,29 +136,26 @@ void Communicate_task(void *p_arg)
     //UNSED(p_arg);
     // wait for serial communication to be established successfully(IPC running)
    // OSTimeDlyHMSM(0, 0, 3, 0, OS_OPT_TIME_DLY, &err);
-    //printf("\r\n wait IPC...... \r\n");
-    
     /*
     ** data init
     */
-//    SerialPakage g_SerialPackRX = {0};
-//    SerialPakage g_SerialPackTX = {0};
+    dataBaseInit();
     /*
     ** usart init
     */
     LED_Init();
     UART_Init(UART_DEV1, 115200u, UART_WORDLENGTH_8B, UART_STOPBITS_1, UART_PARITY_NONE);
-//    UART_Init(UART_DEV2, 115200u, UART_WORDLENGTH_8B, UART_STOPBITS_1, UART_PARITY_NONE);
+//    UART_Init(UART_DEV3, 115200u, UART_WORDLENGTH_8B, UART_STOPBITS_1, UART_PARITY_NONE);
     
     while(1) 
     {   
-        getMsg();   
-//        sendMsg();
+        getMessage();   
+//        sendMessage();
         
         #if 0
         printCmdMsg();
         #endif
-        OSTimeDlyHMSM(0,0,0,20,OS_OPT_TIME_HMSM_STRICT,&err); //—” ±20ms
+        OSTimeDlyHMSM(0,0,0,20,OS_OPT_TIME_HMSM_STRICT,&err); //—” ±10ms
     }
 }
 

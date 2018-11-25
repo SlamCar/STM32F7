@@ -1,6 +1,6 @@
 #include "transport.h"
 
-void getMsg(void)
+void getMessage(void)
 {
     if (UART_RxdWatch(UART_DEV1, 10))
     {
@@ -15,18 +15,17 @@ void getMsg(void)
     }
 }
 
-void sendMsg(void)
+void gsendMessage(void)
 {
-    SerialPakage msg = {0};
-    msg = feedBackMsgPack(db_feedbackMsg);
+    SerialPakage pack = {0};
+    pack = feedBackMsgPack(db_feedbackMsg);
     
 //    EndianTrans(msg);
     
-    HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&msg, 
-                       HEAD_BYTESIZE + msg.head_.dataLen + CRC_BYTESIZE ,1000);
+    HAL_UART_Transmit(&UART_Handler[UART_DEV1],(uint8_t *)&pack, 
+                       HEAD_BYTESIZE + pack.head_.dataLen + CRC_BYTESIZE ,1000);
     
     while(__HAL_UART_GET_FLAG(&UART_Handler[UART_DEV1],UART_FLAG_TC)!=SET){};    //wait  untill send end 
-    memset(&msg, 0 , sizeof(SerialPakage));     
 }
 
 void dataReceive(const UART_MSG *uart_msg)
@@ -40,11 +39,11 @@ void dataReceive(const UART_MSG *uart_msg)
     
 //    pack = EndianTrans(pack);
     
-    if(checkCrc(pack))
+    if(!checkCrc(pack))
     {
-       //update dataBase 
-        Update_CmdMsg(pack);
+        return;
     }
+    updataMessage(pack);
 }
 
 Bool checkCrc(SerialPakage pack)

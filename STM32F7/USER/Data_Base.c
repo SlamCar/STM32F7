@@ -2,12 +2,35 @@
 
 Feedback_Msg  db_feedbackMsg = {0};
 Control_Msg   db_controlMsg =  {0};
+
 ROBOT_Input   g_ROBOT_Input =  {0};
 ROBOT_Output  g_ROBOT_Output = {0};
 
-void Update_CmdMsg(const SerialPakage msg)
+void dataBaseInit(void)
 {
-    memcpy(&db_controlMsg, msg.byData_, sizeof(Control_Msg)); 
+    db_feedbackMsg.now_angle = 0.0;
+    db_feedbackMsg.now_speed = 0.0;
+    
+    db_controlMsg.angle = 0.0;
+    db_controlMsg.speed = 0.0;
+}
+
+void updataMessage(const SerialPakage pack)
+{
+    switch(pack.head_.dataId)
+    {
+        case CMD_IPC_COMMOND:  updateCmdMsg(pack);
+            break;
+        case CMD_RESET:
+            break;
+        case DEBUG_QT_COMMOND:
+            break;
+    }
+}
+
+void updateCmdMsg(const SerialPakage pack)
+{
+    memcpy(&db_controlMsg, pack.byData_, sizeof(Control_Msg)); 
 }
 
 //void Update_FeedbackMsg(const Feedback_Msg msg)
@@ -17,14 +40,14 @@ void Update_CmdMsg(const SerialPakage msg)
 /*
 void ROBOT_Input(ROBOT_Input *Input)
 {
-    //½ÓÊÜÊý¾Ý½âÎö
-    //¸üÐÂÊý¾Ý¿â  ÃüÁîÊý¾Ý  ´«¸ÐÆ÷Êý¾Ý  »úÆ÷ÈË²ÎÊý
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½ï¿½
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½
     
 }
 
 void ROBOT_RunCtr(ROBOT_Input *Input, ROBOT_Output *Output)
 {
-    //Âß¼­ÔËËã  Ä£ÐÍ½âËã  
+    //ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½  Ä£ï¿½Í½ï¿½ï¿½ï¿½  
 }
 */
 
