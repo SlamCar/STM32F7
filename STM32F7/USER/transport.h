@@ -32,11 +32,11 @@ void sendMsg(void);
 
 void dataReceive(const UART_MSG *uart_msg);
 
-Bool checkCrc(SerialPakage msg); 
-uint16_t generateCrc(SerialPakage msg);
+Bool checkCrc(SerialPakage pack); 
+uint16_t generateCrc(SerialPakage pack);
 
-SerialPakage feedMsgPack(Feedback_Msg feedbackMsg);
-void EndianTrans(SerialPakage msg);
+SerialPakage feedBackMsgPack(Feedback_Msg feedbackMsg);
+SerialPakage EndianTrans(SerialPakage pack);
 
 
 
