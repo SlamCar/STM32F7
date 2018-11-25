@@ -40,14 +40,14 @@ void updateCmdMsg(const SerialPakage pack)
 /*
 void ROBOT_Input(ROBOT_Input *Input)
 {
-    //接受数据解析
-    //更新数据库  命令数据  传感器数据  机器人参数
+    //锟斤拷锟斤拷锟斤拷锟捷斤拷锟斤拷
+    //锟斤拷锟斤拷锟斤拷锟捷匡拷  锟斤拷锟斤拷锟斤拷锟斤拷  锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷  锟斤拷锟斤拷锟剿诧拷锟斤拷
     
 }
 
 void ROBOT_RunCtr(ROBOT_Input *Input, ROBOT_Output *Output)
 {
-    //逻辑运算  模型解算  
+    //锟竭硷拷锟斤拷锟斤拷  模锟酵斤拷锟斤拷  
 }
 */
 
